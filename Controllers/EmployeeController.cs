@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Cafeteria_Credit___Ordering_System.Data;
+using Cafeteria_Credit___Ordering_System.Models;
 
 namespace Cafeteria_Credit___Ordering_System.Controllers
 {
@@ -16,14 +17,20 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         {
             return View(await _context.Employees.ToListAsync());
         }
+        // GET: Restaurant
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         // GET: Create a new employee
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create()
+        public IActionResult Create( Employee employee)
         {
             if (ModelState.IsValid)
             {
-                var employee = new Models.Employee
                 {
                     // Initialize properties here
                 };
