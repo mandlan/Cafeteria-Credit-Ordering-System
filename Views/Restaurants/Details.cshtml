@@ -1,36 +1,34 @@
-﻿@model Cafeteria_Credit___Ordering_System.Models.Restaurant
+﻿@model Cafeteria_Credit___Ordering_System.Models.Restaurant  
 
-@{
-    ViewData["Title"] = "Details";
-}
+@{  
+    ViewData["Title"] = "Details";  
+    var employeeNumber = ViewData["EmployeeNumber"] as string; 
+}  
+<h2>Menu - @Model.Name</h2>  
 
-<h1>Details</h1>
+<form asp-action="PlaceOrder" method="post">  
+    <table class="table table-bordered">  
+        <thead>  
+            <tr>  
+                <th>Item</th>  
+                <th>Description</th>  
+                <th>Price</th>  
+                <th>Quantity</th>  
+            </tr>  
+        </thead>  
+        <tbody>  
+            @foreach (var item in Model.MenuItems)  
+            {  
+                <tr>  
+                    <td>@item.Name</td>  
+                    <td>@item.Description</td>  
+                    <td>R @item.Price</td>  
+                    <td><input type="number" name="SelectedItems[@item.Id].Quantity" class="form-control" min="0" /></td>  
+                </tr>  
+            }  
+        </tbody>  
+    </table>  
 
-<div>
-    <h4>Restaurant</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LocationDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LocationDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContactNumber)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <input type="hidden" name="EmployeeNumber" value="@employeeNumber" />  
+    <button type="submit" class="btn btn-success">Place Order</button>  
+</form>

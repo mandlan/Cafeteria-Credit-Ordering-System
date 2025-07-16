@@ -1,17 +1,22 @@
 ﻿@model Cafeteria_Credit___Ordering_System.ViewModels.DepositViewModel
 
-<h2>Deposit Funds</h2>
+@{
+    ViewData["Title"] = "Deposit Page";
+}
 
-<form asp-action="Deposit" method="post">
-    <div class="form-group">
-        <label asp-for="EmployeeNumber"></label>
-        <input asp-for="EmployeeNumber" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="DepositAmount"></label>
-        <input asp-for="DepositAmount" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Submit Deposit</button>
-</form>
-
-<a asp-action="Index">Back to List</a>
+<div class="card shadow p-4">
+    <h3>Deposit Funds</h3>
+    <form asp-action="Deposit" method="post">
+        <div class="mb-3">
+            <label asp-for="EmployeeNumber" class="form-label"></label>
+            <input asp-for="EmployeeNumber" class="form-control" />
+            <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="DepositAmount" class="form-label"></label>
+            <input asp-for="DepositAmount" class="form-control" />
+            <span asp-validation-for="DepositAmount" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>

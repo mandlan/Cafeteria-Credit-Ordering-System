@@ -1,0 +1,26 @@
+﻿@model Cafeteria_Credit___Ordering_System.Models.Order  
+
+@{  
+    ViewData["Title"] = "Delete";  
+}  
+
+<div class="card p-4 shadow">  
+    <h3 class="text-success">Order Confirmed!</h3>  
+    <p>Your order <strong>#@Model.Id</strong> has been placed on <strong>@Model.OrderDate.ToString("f")</strong></p>  
+    <p><strong>Total:</strong> R @Model.TotalAmount.ToString("0.00")</p>  
+    <p><strong>Status:</strong> @Model.Status</p>  
+
+    <h5 class="mt-4">Items:</h5>  
+    <ul class="list-group list-group-flush">  
+        @foreach (var item in Model.OrderItems)  
+        {  
+            <li class="list-group-item d-flex justify-content-between">  
+                <span>@item.Name x @item.Quantity</span>  
+                <span>R @item.Price.ToString("0.00")</span>  
+            </li>  
+        }  
+    </ul>  
+
+    <a href="/Orders/MyOrders?employeeNumber=@Model.Employee.EmployeeNumber" class="btn btn-primary mt-4">View My Orders</a>  
+    <a href="/Restaurants" class="btn btn-outline-secondary mt-4 ms-2">Order More</a>  
+</div>

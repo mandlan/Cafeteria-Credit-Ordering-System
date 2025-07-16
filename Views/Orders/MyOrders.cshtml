@@ -1,0 +1,22 @@
+﻿
+
+@model List<Order>
+
+<h2>My Orders</h2>
+
+@foreach (var order in Model)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>Order #@order.Id - @order.Status</h5>
+            <p><strong>Date:</strong> @order.OrderDate.ToString("g")</p>
+            <p><strong>Total:</strong> R @order.TotalAmount.ToString("0.00")</p>
+            <ul>
+                @foreach (var item in order.OrderItems)
+                {
+                    <li>@item.Name x @item.Quantity (R @item.Price)</li>
+                }
+            </ul>
+        </div>
+    </div>
+}

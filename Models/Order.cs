@@ -3,12 +3,11 @@
     public class Order
     {
         public int Id { get; set; }
-        public string EmployeeId { get; set; } // Foreign key to the user who placed the order
-        public Employee employee { get; set; }
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public string EmployeeId { get; set; }
+        public Employee Employee { get; set; }   
+        public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public string Status { get; set; } = "Pending"; // Default status is Pending
-        public ICollection<OrderItem> orderItems { get; set; }
-        
-        }
+        public string Status { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
+    }
 }

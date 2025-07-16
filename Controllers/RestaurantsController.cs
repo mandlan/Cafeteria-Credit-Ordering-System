@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Cafeteria_Credit___Ordering_System.Data;
+﻿using Cafeteria_Credit___Ordering_System.Data;
 using Cafeteria_Credit___Ordering_System.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+
 
 namespace Cafeteria_Credit___Ordering_System.Controllers
 {
@@ -44,13 +42,17 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Create
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Restaurants/Create
-       
+        [Authorize(Roles = "Admin")]
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,LocationDescription,ContactNumber")] Restaurant restaurant)
@@ -65,6 +67,8 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Edit/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,6 +85,8 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Restaurants/Edit/5
+        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LocationDescription,ContactNumber")] Restaurant restaurant)
@@ -114,6 +120,8 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Delete/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,6 +140,8 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Restaurants/Delete/5
+        [Authorize(Roles = "Admin")]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
