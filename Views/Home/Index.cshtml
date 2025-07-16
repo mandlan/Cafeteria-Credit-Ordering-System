@@ -1,10 +1,70 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-5 fw-bold">Welcome to Cafeteria Credit</h1>
-    <p class="lead">Deposit funds, browse menus, and order your favorite meals — all with extra R500 credit bonuses!</p>
-    <a href="/Employees/Deposit" class="btn btn-primary btn-lg mt-3">Make a Deposit</a>
-    <a href="/Restaurants" class="btn btn-outline-success btn-lg mt-3 ms-2">Browse Restaurants</a>
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="text-center">
+        <h1 class="display-4">🍽️ Welcome to Cafeteria Credit</h1>
+        <p class="lead mt-3">A smarter way for employees to eat well — and for restaurants to serve with speed.</p>
+        <p class="text-muted">
+            Our cafeteria credit system enables verified restaurants to register, upload menus, and fulfill employee orders with real-time delivery tracking.
+            Administrators manage deposit balances and access detailed order histories for transparency and control.
+        </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mt-4">
+        <a asp-controller="Restaurants" asp-action="Create" class="btn btn-outline-primary me-2">
+            Register Your Restaurant 🍴
+        </a>
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-success">Admin Login 🔐</a>
+
+    </div>
+
+    <!-- Optional Feature Highlights -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">💵 Deposit & Bonus</h5>
+                    <p class="card-text">
+                        Employees receive an additional R500 credit for every R250 they deposit monthly. Smart incentives for healthy eating!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Order & Deliver</h5>
+                    <p class="card-text">
+                        Employees browse menus, place orders, and track delivery statuses from Pending to Delivered — all in one place.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🏪 Partner Restaurants</h5>
+                    <p class="card-text">
+                        Restaurants can register, manage menus, and fulfill cafeteria orders. Easy onboarding, clear interfaces, and support included.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security & Disclaimer -->
+    <footer class="text-center mt-5 text-muted">
+        <hr />
+        <small>
+            This platform is intended for registered restaurant partners and cafeteria administrators. Employees are onboarded internally and access restricted functionality after login.
+        </small>
+    </footer>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

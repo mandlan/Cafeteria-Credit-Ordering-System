@@ -1,20 +1,20 @@
-﻿@model IEnumerable<Cafeteria_Credit___Ordering_System.Models.Restaurant>
+﻿@model IEnumerable<Restaurant>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h2>Available Restaurants</h2>
+<h2 class="mb-4">🍽️ Available Restaurants</h2>
 
 <div class="row">
     @foreach (var restaurant in Model)
     {
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">@restaurant.Name</h5>
                     <p class="card-text">@restaurant.LocationDescription</p>
-                    <a asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-outline-primary">View Menu</a>
+                    <p class="card-text text-muted">📞 @restaurant.ContactNumber</p>
+
+                    <a asp-action="Menu" asp-route-id="@restaurant.Id" class="btn btn-outline-primary">
+                        View Menu 🧾
+                    </a>
                 </div>
             </div>
         </div>

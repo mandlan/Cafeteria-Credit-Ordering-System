@@ -4,6 +4,7 @@ using Cafeteria_Credit___Ordering_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cafeteria_Credit___Ordering_System.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250716122444_AddIdentityLinkToEmployee")]
+    partial class AddIdentityLinkToEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,11 +98,12 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EstimatedDeliveryTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("EmployeeId1")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -113,7 +117,7 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId1");
 
                     b.ToTable("Order");
                 });
@@ -143,8 +147,6 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
 
                     b.HasIndex("OrderId");
 
@@ -399,8 +401,8 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
             modelBuilder.Entity("Cafeteria_Credit___Ordering_System.Models.Order", b =>
                 {
                     b.HasOne("Cafeteria_Credit___Ordering_System.Models.Employee", "Employee")
-                        .WithMany("Orders")
-                        .HasForeignKey("EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -409,19 +411,11 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
 
             modelBuilder.Entity("Cafeteria_Credit___Ordering_System.Models.OrderItem", b =>
                 {
-                    b.HasOne("Cafeteria_Credit___Ordering_System.Models.MenuItem", "MenuItem")
-                        .WithMany()
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Cafeteria_Credit___Ordering_System.Models.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("MenuItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -473,11 +467,6 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Cafeteria_Credit___Ordering_System.Models.Employee", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Cafeteria_Credit___Ordering_System.Models.Order", b =>

@@ -12,5 +12,6 @@ namespace Cafeteria_Credit___Ordering_System.Models
         public string Description { get; set; }
         public decimal Price { get; set; }
         public Restaurant Restaurant { get; set; }
+
     }
 }

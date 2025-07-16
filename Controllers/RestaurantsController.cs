@@ -16,12 +16,13 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         {
             _context = context;
         }
+       
 
         // GET: Restaurants
         public async Task<IActionResult> Index()
         {
             return View(await _context.Restaurants.ToListAsync());
-        }
+        }   
 
         // GET: Restaurants/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -42,7 +43,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Create
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public IActionResult Create()
         {
@@ -50,7 +51,6 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Restaurants/Create
-        [Authorize(Roles = "Admin")]
 
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Edit/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,7 +85,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Restaurants/Edit/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -120,7 +120,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Restaurants/Delete/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -140,7 +140,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Restaurants/Delete/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -160,5 +160,39 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         {
             return _context.Restaurants.Any(e => e.Id == id);
         }
+        [HttpGet]
+        public async Task<IActionResult> Search(string query)
+        {
+            var results = await _context.MenuItems
+                .Include(m => m.Restaurant)
+                .Where(m => m.Name.Contains(query) || m.Description.Contains(query))
+                .ToListAsync();
+
+            ViewBag.Query = query;
+            return View(results);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(Restaurant model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Restaurants.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("RegistrationSuccess"); // optional
+            }
+
+            return View(model);
+        }
+
+
     }
 }

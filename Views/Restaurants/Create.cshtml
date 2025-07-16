@@ -1,22 +1,25 @@
-﻿@model Cafeteria_Credit___Ordering_System.Models.Restaurant
+﻿@model Restaurant
 
-@{
-    ViewData["Title"] = "Create";
+<h2 class="mt-4 mb-3">🍽️ Register Your Restaurant</h2>
+<form asp-action="Register" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Restaurant Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LocationDescription" class="form-label">Location</label>
+        <input asp-for="LocationDescription" class="form-control" />
+        <span asp-validation-for="LocationDescription" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ContactNumber" class="form-label">Contact Number</label>
+        <input asp-for="ContactNumber" class="form-control" />
+        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Register Now</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
-
-<div class="card p-4">
-    <h3>Add New Restaurant</h3>
-    <form asp-action="Create">
-        <div class="mb-3">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="LocationDescription" class="form-label"></label>
-            <input asp-for="LocationDescription" class="form-control" />
-            <span asp-validation-for="LocationDescription" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-success">Save</button>
-    </form>
-</div>

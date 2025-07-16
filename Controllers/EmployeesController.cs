@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Cafeteria_Credit___Ordering_System.Data;
+﻿using Cafeteria_Credit___Ordering_System.Data;
 using Cafeteria_Credit___Ordering_System.Models;
 using Cafeteria_Credit___Ordering_System.ViewModels;    
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cafeteria_Credit___Ordering_System.Controllers
 {
@@ -21,6 +17,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Employees
+      
         public async Task<IActionResult> Index()
         {
             return View(await _context.Employees.ToListAsync());
@@ -45,13 +42,14 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Employees/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Employees/Create
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,EmployeeNumber,Name,balance,lastDepositMonth")] Employee employee)
@@ -66,6 +64,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Employees/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,6 +81,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Employees/Edit/5
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeNumber,Name,balance,lastDepositMonth")] Employee employee)
@@ -115,6 +115,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // GET: Employees/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,6 +134,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Employees/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -216,14 +218,15 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
                 ModelState.AddModelError("", "Insufficient funds.");
                 return View(model);
             }
-
+            
             // Create Order
             var order = new Order
             {
-                EmployeeId = employee.Id.ToString(),
+                EmployeeId = employee.Id,
                 OrderDate = DateTime.Now,
                 TotalAmount = totalCost,
                 Status = "Pending"
+
             };
 
             _context.Orders.Add(order);
@@ -245,7 +248,21 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
             employee.balance -= totalCost;
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", new { id = employee.Id });
+            return RedirectToAction("OrderSummary", new { orderId = order.Id });
+            ;
         }
+        public async Task<IActionResult> OrderSummary(int orderId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.MenuItem)
+                .Include(o => o.Employee)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null) return NotFound();
+
+            return View(order);
+        }
+
     }
 }

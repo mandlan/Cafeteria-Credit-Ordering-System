@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cafeteria_Credit___Ordering_System.Data;
+using Cafeteria_Credit___Ordering_System.Models;
 
-namespace Cafeteria_Credit___Ordering_System.Models
+namespace Cafeteria_Credit___Ordering_System.Controllers
 {
     public class OrderItemsController : Controller
     {

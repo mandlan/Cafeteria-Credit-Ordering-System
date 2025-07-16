@@ -1,0 +1,30 @@
+﻿@model List<MenuItem>
+@{
+    var query = ViewBag.Query;
+}
+
+<h2>🔍 Results for "@query"</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No menu items found matching your search.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Description</p>
+                        <p><strong>R @item.Price</strong></p>
+                        <p class="text-muted">From: @item.Restaurant.Name</p>
+                        <a href="/Restaurants/Menu/@item.RestaurantId" class="btn btn-sm btn-outline-primary">View Restaurant</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

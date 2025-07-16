@@ -1,18 +1,13 @@
-﻿@model IEnumerable<Cafeteria_Credit___Ordering_System.Models.Employee>
+﻿@model IEnumerable<Employee>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h2>Employees</h2>
-
+<h2 class="mb-3">Employee Accounts</h2>
 <table class="table table-hover">
-    <thead class="table-light">
+    <thead>
         <tr>
             <th>Name</th>
-            <th>Employee #</th>
+            <th>Employee Number</th>
             <th>Balance</th>
-            <th></th>
+            <th>Last Deposit</th>
         </tr>
     </thead>
     <tbody>
@@ -21,13 +16,9 @@
             <tr>
                 <td>@emp.Name</td>
                 <td>@emp.EmployeeNumber</td>
-                <td>R @emp.balance.ToString("0.00")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-info">View</a>
-                </td>
+                <td>R @emp.balance</td>
+                <td>@emp.lastDepositMonth.ToString("yyyy-MM")</td>
             </tr>
         }
     </tbody>
 </table>
-
-<a asp-action="Create" class="btn btn-success">Add Employee</a>
