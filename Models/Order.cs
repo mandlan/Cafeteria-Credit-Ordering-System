@@ -4,10 +4,11 @@
     {
         public int Id { get; set; }
         public string EmployeeId { get; set; } // Foreign key to the user who placed the order
+        public Employee employee { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = "Pending"; // Default status is Pending
-        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
-        // Navigation property for the user
+        public ICollection<OrderItem> orderItems { get; set; }
+        
         }
 }

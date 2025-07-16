@@ -82,8 +82,6 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         }
 
         // POST: Employees/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeNumber,Name,balance,lastDepositMonth")] Employee employee)
@@ -196,6 +194,55 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
             employee.balance += model.DepositAmount + bonus;
             employee.MonthlyDeposit = newTotal;
 
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = employee.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlaceOrder(PlaceOrderViewModel model)
+        {
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeNumber == model.EmployeeNumber);
+            if (employee == null || model.MenuItems == null)
+            {
+                ModelState.AddModelError("", "Employee or items not found.");
+                return View(model);
+            }
+
+            var totalCost = model.MenuItems.Sum(i => i.Price * i.Quantity);
+            if (employee.balance < totalCost)
+            {
+                ModelState.AddModelError("", "Insufficient funds.");
+                return View(model);
+            }
+
+            // Create Order
+            var order = new Order
+            {
+                EmployeeId = employee.Id.ToString(),
+                OrderDate = DateTime.Now,
+                TotalAmount = totalCost,
+                Status = "Pending"
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync(); 
+
+            // Add OrderItems
+            foreach (var item in model.MenuItems.Where(i => i.Quantity > 0))
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderId = order.Id,
+                    MenuItemId = item.MenuItemId,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                };
+                _context.OrderItems.Add(orderItem);
+            }
+
+            employee.balance -= totalCost;
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = employee.Id });
