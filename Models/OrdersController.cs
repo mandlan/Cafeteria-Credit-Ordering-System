@@ -6,26 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cafeteria_Credit___Ordering_System.Data;
-using Cafeteria_Credit___Ordering_System.Models;
 
-namespace Cafeteria_Credit___Ordering_System.Controllers
+namespace Cafeteria_Credit___Ordering_System.Models
 {
-    public class RestaurantsController : Controller
+    public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RestaurantsController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Restaurants
+        // GET: Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Restaurants.ToListAsync());
+            return View(await _context.Order.ToListAsync());
         }
 
-        // GET: Restaurants/Details/5
+        // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +32,39 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants
+            var order = await _context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (restaurant == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(restaurant);
+            return View(order);
         }
 
-        // GET: Restaurants/Create
+        // GET: Orders/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Restaurants/Create
-       
+        // POST: Orders/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LocationDescription,ContactNumber")] Restaurant restaurant)
+        public async Task<IActionResult> Create([Bind("Id,EmployeeId,OrderDate,TotalAmount,Status")] Order order)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(restaurant);
+                _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(restaurant);
+            return View(order);
         }
 
-        // GET: Restaurants/Edit/5
+        // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant == null)
+            var order = await _context.Order.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(restaurant);
+            return View(order);
         }
 
-        // POST: Restaurants/Edit/5
+        // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LocationDescription,ContactNumber")] Restaurant restaurant)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,OrderDate,TotalAmount,Status")] Order order)
         {
-            if (id != restaurant.Id)
+            if (id != order.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
             {
                 try
                 {
-                    _context.Update(restaurant);
+                    _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RestaurantExists(restaurant.Id))
+                    if (!OrderExists(order.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(restaurant);
+            return View(order);
         }
 
-        // GET: Restaurants/Delete/5
+        // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,34 +123,34 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
                 return NotFound();
             }
 
-            var restaurant = await _context.Restaurants
+            var order = await _context.Order
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (restaurant == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(restaurant);
+            return View(order);
         }
 
-        // POST: Restaurants/Delete/5
+        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var restaurant = await _context.Restaurants.FindAsync(id);
-            if (restaurant != null)
+            var order = await _context.Order.FindAsync(id);
+            if (order != null)
             {
-                _context.Restaurants.Remove(restaurant);
+                _context.Order.Remove(order);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RestaurantExists(int id)
+        private bool OrderExists(int id)
         {
-            return _context.Restaurants.Any(e => e.Id == id);
+            return _context.Order.Any(e => e.Id == id);
         }
     }
 }
