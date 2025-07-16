@@ -13,6 +13,8 @@ namespace Cafeteria_Credit___Ordering_System.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

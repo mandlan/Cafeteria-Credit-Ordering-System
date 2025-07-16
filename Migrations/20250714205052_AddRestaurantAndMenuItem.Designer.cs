@@ -33,7 +33,7 @@ namespace Cafeteria_Credit___Ordering_System.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("EmployeenNumber")
+                    b.Property<string>("EmployeeNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

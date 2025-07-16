@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cafeteria_Credit___Ordering_System.Data;
 using Cafeteria_Credit___Ordering_System.Models;
+using Cafeteria_Credit___Ordering_System.ViewModels;    
 
 namespace Cafeteria_Credit___Ordering_System.Controllers
 {
@@ -53,7 +54,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EmployeenNumber,Name,balance,lastDepositMonth")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,EmployeeNumber,Name,balance,lastDepositMonth")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +86,7 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeenNumber,Name,balance,lastDepositMonth")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeNumber,Name,balance,lastDepositMonth")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -151,6 +152,53 @@ namespace Cafeteria_Credit___Ordering_System.Controllers
         private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.Id == id);
+        }
+        [HttpGet]
+        public IActionResult Deposit() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Deposit(DepositViewModel model)
+        {
+            if (!ModelState.IsValid || model.DepositAmount <= 0)
+            {
+                ModelState.AddModelError("", "Enter a valid deposit amount.");
+                return View(model);
+            }
+
+            var employee = await _context.Employees
+                .FirstOrDefaultAsync(e => e.EmployeeNumber == model.EmployeeNumber);
+
+            if (employee == null)
+            {
+                ModelState.AddModelError("", "Employee not found.");
+                return View(model);
+            }
+
+            var currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            // Reset deposit tracking if it's a new month
+            if (employee.lastDepositMonth != currentMonth)
+            {
+                employee.lastDepositMonth = currentMonth;
+                employee.MonthlyDeposit = 0; 
+            }
+
+            // Calculate bonus based on R250 increments
+            decimal previousTotal = employee.MonthlyDeposit;
+            decimal newTotal = previousTotal + model.DepositAmount;
+            int prevBlocks = (int)(previousTotal / 250);
+            int newBlocks = (int)(newTotal / 250);
+            int earnedBlocks = newBlocks - prevBlocks;
+
+            decimal bonus = earnedBlocks * 500;
+
+            employee.balance += model.DepositAmount + bonus;
+            employee.MonthlyDeposit = newTotal;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = employee.Id });
         }
     }
 }
